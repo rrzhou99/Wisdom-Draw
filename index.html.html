@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧籤 · 心靈法語</title>
+  <style>
+    :root {
+      --primary: #c22929;
+      --bg: #fffbf5;
+      --text: #333333;
+    }
+    body {
+      margin: 0;
+      padding: 20px 14px;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      text-align: center;
+    }
+    .lang-bar {
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .lang-bar a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 26px;
+      margin: 8px 0 18px;
+      letter-spacing: 2px;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    input[type="number"] {
+      width: 72px;
+      padding: 8px 10px;
+      font-size: 16px;
+      border: 1.5px solid #dcdcdc;
+      border-radius: 8px;
+      text-align: center;
+      outline: none;
+    }
+    input[type="number"]:focus {
+      border-color: var(--primary);
+    }
+    button {
+      padding: 9px 16px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    button:active {
+      opacity: 0.85;
+      transform: scale(0.98);
+    }
+    .btn-query {
+      background-color: #eee;
+      color: #333;
+    }
+    .btn-draw {
+      background-color: var(--primary);
+      color: #fff;
+    }
+    .card-wrap {
+      max-width: 440px;
+      margin: 0 auto;
+      min-height: 260px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .lot-img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      display: none;
+    }
+    .lot-img.shake {
+      animation: shake 0.3s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .placeholder {
+      color: #888;
+      font-size: 15px;
+      padding: 50px 10px;
+      line-height: 1.6;
+    }
+    .save-hint {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #777;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lang-bar">
+    <a href="en.html">English Version ↗</a>
+  </div>
+
+  <h1>🪷 智慧籤 · 心靈法語 🪷</h1>
+
+  <div class="controls">
+    <input type="number" id="lotInput" min="1" max="70" placeholder="1-70">
+    <button class="btn-query" onclick="handleQuery()">查詢籤號</button>
+    <button class="btn-draw" onclick="handleRandom()">隨機抽籤</button>
+  </div>
+
+  <div class="card-wrap">
+    <div id="tip" class="placeholder">請輸入籤號 (1–70)<br>或點選「隨機抽籤」獲取法語</div>
+    <img id="lotImg" class="lot-img" alt="智慧籤卡片">
+  </div>
+  <div id="saveHint" class="save-hint">長按上方圖片可儲存至手機相簿留念</div>
+
+  <script>
+    const TOTAL_LOTS = 70;
+
+    function renderLot(num) {
+      if (num < 1 || num > TOTAL_LOTS || isNaN(num)) {
+        alert("請輸入 1 至 " + TOTAL_LOTS + " 之間的有效籤號。");
+        return;
+      }
+      const img = document.getElementById("lotImg");
+      const tip = document.getElementById("tip");
+      const hint = document.getElementById("saveHint");
+
+      img.src = `images/${num}.jpg`;
+      img.style.display = "block";
+      tip.style.display = "none";
+      hint.style.display = "block";
+
+      img.classList.remove("shake");
+      void img.offsetWidth;
+      img.classList.add("shake");
+    }
+
+    function handleQuery() {
+      const val = parseInt(document.getElementById("lotInput").value, 10);
+      renderLot(val);
+    }
+
+    function handleRandom() {
+      const rand = Math.floor(Math.random() * TOTAL_LOTS) + 1;
+      document.getElementById("lotInput").value = rand;
+      renderLot(rand);
+    }
+  </script>
+</body>
+</html>

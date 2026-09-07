@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wisdom Draw · Dharma Verses</title>
+  <style>
+    :root {
+      --primary: #9e2a2b;
+      --gold: #d4af37;
+      --bg: #fdfbf7;
+      --card-bg: #ffffff;
+      --text: #2f3e46;
+    }
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Georgia", serif;
+      background-color: var(--bg);
+      color: var(--text);
+      text-align: center;
+    }
+    .lang-bar {
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .lang-bar a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 24px;
+      margin: 8px 0 20px;
+      letter-spacing: 0.5px;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    input[type="number"] {
+      width: 76px;
+      padding: 8px 10px;
+      font-size: 16px;
+      border: 1.5px solid #ccc;
+      border-radius: 8px;
+      text-align: center;
+      outline: none;
+    }
+    input[type="number"]:focus {
+      border-color: var(--primary);
+    }
+    button {
+      padding: 9px 16px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    button:active {
+      opacity: 0.85;
+      transform: scale(0.98);
+    }
+    .btn-query { 
+      background-color: #eee; 
+      color: #333; 
+    }
+    .btn-draw { 
+      background-color: var(--primary); 
+      color: #fff; 
+    }
+    .card-wrap {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .verse-card {
+      background: var(--card-bg);
+      border: 1px solid #ebd9c8;
+      border-radius: 12px;
+      padding: 30px 24px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+      display: none;
+      animation: fadeIn 0.35s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .lot-badge {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .verse-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1a1a1a;
+      margin: 0 0 16px 0;
+      border-bottom: 1.5px solid #f4eae0;
+      padding-bottom: 10px;
+    }
+    .verse-body {
+      white-space: pre-line;
+      line-height: 1.85;
+      font-size: 16px;
+      color: #333;
+    }
+    .placeholder {
+      color: #888;
+      padding: 50px 0;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lang-bar">
+    <a href="index.html">← 中文版</a>
+  </div>
+
+  <h1>✨ Wisdom Draw · Dharma Verses ✨</h1>
+
+  <div class="controls">
+    <input type="number" id="lotInput" min="1" max="70" placeholder="1-70">
+    <button class="btn-query" onclick="handleQuery()">Search</button>
+    <button class="btn-draw" onclick="handleRandom()">Draw Slip</button>
+  </div>
+
+  <div class="card-wrap">
+    <div id="tip" class="placeholder">Enter a number (1–70) or tap "Draw Slip" to receive your verse.</div>
+    <div id="card" class="verse-card">
+      <div id="cardBadge" class="lot-badge"></div>
+      <div id="cardTitle" class="verse-title"></div>
+      <div id="cardBody" class="verse-body"></div>
+    </div>
+  </div>
+
+  <!-- Loads your generated verses.js file from the same directory -->
+  <script src="verses.js"></script>
+
+  <script>
+    const TOTAL_LOTS = 70;
+
+    function renderLot(num) {
+      if (typeof verses === "undefined") {
+        alert("verses.js file is missing or still loading. Please make sure verses.js is in the same directory.");
+        return;
+      }
+
+      const item = verses[num];
+      if (num < 1 || num > TOTAL_LOTS || isNaN(num) || !item) {
+        alert("Please enter a valid number between 1 and " + TOTAL_LOTS);
+        return;
+      }
+
+      document.getElementById("tip").style.display = "none";
+      const card = document.getElementById("card");
+      const titleEl = document.getElementById("cardTitle");
+      const bodyEl = document.getElementById("cardBody");
+
+      document.getElementById("cardBadge").innerText = `LOT NO. ${num}`;
+      titleEl.innerText = item.title;
+      bodyEl.innerText = item.text;
+
+      // Dynamically apply cell alignment from Google Sheets (center or left)
+      const alignment = item.align || "left";
+      titleEl.style.textAlign = alignment;
+      bodyEl.style.textAlign = alignment;
+
+      // Re-trigger fade-in animation
+      card.style.display = "none";
+      void card.offsetWidth;
+      card.style.display = "block";
+    }
+
+    function handleQuery() {
+      const val = parseInt(document.getElementById("lotInput").value, 10);
+      renderLot(val);
+    }
+
+    function handleRandom() {
+      const rand = Math.floor(Math.random() * TOTAL_LOTS) + 1;
+      document.getElementById("lotInput").value = rand;
+      renderLot(rand);
+    }
+  </script>
+</body>
+</html>
