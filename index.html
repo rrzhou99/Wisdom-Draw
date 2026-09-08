@@ -1,134 +1,198 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>智慧籤 · 心靈法語</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智慧籤 • 心靈法語</title>
   <style>
     :root {
-      --primary: #c22929;
-      --bg: #fffbf5;
-      --text: #333333;
+      --primary-red: #b7282e;
+      --primary-hover: #961f24;
+      --btn-gray: #e2e8f0;
+      --btn-gray-hover: #cbd5e1;
+      --bg-cream: #faf7f2;
+      --border-color: #e5dfd5;
+      --text-dark: #2c2c2c;
     }
-    body {
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 20px 14px;
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      text-align: center;
+      padding: 0;
     }
-    .lang-bar {
-      margin-bottom: 12px;
-      font-size: 14px;
-    }
-    .lang-bar a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: bold;
-    }
-    h1 {
-      color: var(--primary);
-      font-size: 26px;
-      margin: 8px 0 18px;
-      letter-spacing: 2px;
-    }
-    .controls {
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Noto Sans TC", sans-serif;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1rem;
+    }
+
+    .lang-switch {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    .lang-switch a {
+      color: var(--primary-red);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px dashed var(--primary-red);
+      padding-bottom: 2px;
+    }
+
+    .lang-switch a:hover {
+      opacity: 0.8;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      color: var(--primary-red);
+      font-size: 1.95rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .control-panel {
+      display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      width: 100%;
+      max-width: 480px;
     }
+
     input[type="number"] {
-      width: 72px;
-      padding: 8px 10px;
-      font-size: 16px;
-      border: 1.5px solid #dcdcdc;
-      border-radius: 8px;
+      width: 90px;
+      padding: 0.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1.05rem;
       text-align: center;
       outline: none;
+      background: #fff;
     }
+
     input[type="number"]:focus {
-      border-color: var(--primary);
+      border-color: var(--primary-red);
+      box-shadow: 0 0 0 2px rgba(183, 40, 46, 0.15);
     }
-    button {
-      padding: 9px 16px;
-      font-size: 15px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
+
+    .btn {
+      padding: 0.65rem 1.25rem;
+      border-radius: 6px;
+      font-size: 1rem;
       font-weight: 600;
-      transition: opacity 0.2s, transform 0.1s;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    button:active {
-      opacity: 0.85;
-      transform: scale(0.98);
-    }
-    .btn-query {
-      background-color: #eee;
-      color: #333;
-    }
-    .btn-draw {
-      background-color: var(--primary);
+
+    /* 查詢籤號：紅色高亮主按鈕 */
+    .btn-search {
+      background: var(--primary-red);
       color: #fff;
+      border: none;
+      box-shadow: 0 3px 8px rgba(183, 40, 46, 0.25);
     }
-    .card-wrap {
-      max-width: 440px;
-      margin: 0 auto;
-      min-height: 260px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+
+    .btn-search:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
     }
-    .lot-img {
+
+    /* 隨機抽籤：灰色次要按鈕 */
+    .btn-draw {
+      background: var(--btn-gray);
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-draw:hover {
+      background: var(--btn-gray-hover);
+      color: #0f172a;
+      transform: translateY(-1px);
+    }
+
+    .display-area {
       width: 100%;
+      max-width: 460px;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .empty-tip {
+      color: #8c827a;
+      font-size: 1.05rem;
+    }
+
+    #lotImg {
+      max-width: 100%;
       height: auto;
       border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       display: none;
     }
-    .lot-img.shake {
-      animation: shake 0.3s ease-in-out;
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    .placeholder {
-      color: #888;
-      font-size: 15px;
-      padding: 50px 10px;
-      line-height: 1.6;
-    }
+
     .save-hint {
-      margin-top: 14px;
-      font-size: 13px;
-      color: #777;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #8c827a;
       display: none;
+      text-align: center;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <div class="lang-bar">
+  <div class="lang-switch">
     <a href="en.html">English Version ↗</a>
   </div>
 
-  <h1>🪷 智慧籤 · 心靈法語 🪷</h1>
+  <header>
+    <h1>🪷 智慧籤 • 心靈法語 🪷</h1>
+  </header>
 
-  <div class="controls">
-    <input type="number" id="lotInput" min="1" max="70" placeholder="1-70">
-    <button class="btn-query" onclick="handleQuery()">查詢籤號</button>
-    <button class="btn-draw" onclick="handleRandom()">隨機抽籤</button>
+  <div class="control-panel">
+    <input type="number" id="lotInput" min="1" max="70" placeholder="1-70" />
+    <!-- 查詢籤號為紅色按鈕 -->
+    <button class="btn btn-search" onclick="handleQuery()">查詢籤號</button>
+    <!-- 隨機抽籤為灰色按鈕 -->
+    <button class="btn btn-draw" onclick="handleRandom()">隨機抽籤</button>
   </div>
 
-  <div class="card-wrap">
-    <div id="tip" class="placeholder">請輸入籤號 (1–70)<br>或點選「隨機抽籤」獲取法語</div>
-    <img id="lotImg" class="lot-img" alt="智慧籤卡片">
+  <div class="display-area">
+    <div id="tip" class="empty-tip">請輸入籤號 (1–70) 或點擊「隨機抽籤」</div>
+    <img id="lotImg" alt="智慧籤卡片" />
+    <div id="saveHint" class="save-hint">提示：可長按圖片或截圖保存法語</div>
   </div>
-  <div id="saveHint" class="save-hint">長按上方圖片可儲存至手機相簿留念</div>
 
   <script>
     const TOTAL_LOTS = 70;
@@ -138,18 +202,21 @@
         alert("請輸入 1 至 " + TOTAL_LOTS + " 之間的有效籤號。");
         return;
       }
+
       const img = document.getElementById("lotImg");
       const tip = document.getElementById("tip");
       const hint = document.getElementById("saveHint");
 
+      // 使用 .png 副檔名匹配倉庫中的圖片
       img.src = `images/${num}.png`;
       img.style.display = "block";
       tip.style.display = "none";
       hint.style.display = "block";
 
-      img.classList.remove("shake");
+      // 觸發淡入動畫
+      img.classList.remove("fade-in");
       void img.offsetWidth;
-      img.classList.add("shake");
+      img.classList.add("fade-in");
     }
 
     function handleQuery() {
