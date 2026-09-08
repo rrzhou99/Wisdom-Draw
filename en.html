@@ -1,199 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wisdom Draw · Dharma Verses</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wisdom Slips • Spiritual Verses</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary: #9e2a2b;
-      --gold: #d4af37;
-      --bg: #fdfbf7;
+      --primary-red: #b7282e;
+      --primary-hover: #961f24;
+      --btn-gray: #e2e8f0;
+      --btn-gray-hover: #cbd5e1;
+      --text-dark: #2c2c2c;
+      --bg-cream: #faf7f2;
       --card-bg: #ffffff;
-      --text: #2f3e46;
+      --border-color: #e5dfd5;
+      --gold-accent: #c5a059;
     }
-    body {
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 24px 16px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Georgia", serif;
-      background-color: var(--bg);
-      color: var(--text);
-      text-align: center;
+      padding: 0;
     }
-    .lang-bar {
-      margin-bottom: 12px;
-      font-size: 14px;
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: 'Lora', Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1rem;
     }
-    .lang-bar a {
-      color: var(--primary);
+
+    .lang-switch {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .lang-switch a {
+      color: var(--primary-red);
       text-decoration: none;
       font-weight: 600;
+      border-bottom: 1px dashed var(--primary-red);
+      padding-bottom: 2px;
     }
+
+    .lang-switch a:hover {
+      opacity: 0.8;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
     h1 {
-      color: var(--primary);
-      font-size: 24px;
-      margin: 8px 0 20px;
-      letter-spacing: 0.5px;
-    }
-    .controls {
+      font-family: 'Cinzel', serif;
+      color: var(--primary-red);
+      font-size: 1.85rem;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
+      justify-content: center;
+      gap: 0.5rem;
     }
+
+    .subtitle {
+      color: #666;
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+
+    .control-panel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
     input[type="number"] {
-      width: 76px;
-      padding: 8px 10px;
-      font-size: 16px;
-      border: 1.5px solid #ccc;
-      border-radius: 8px;
+      width: 80px;
+      padding: 0.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
       text-align: center;
       outline: none;
+      font-family: 'Lora', serif;
     }
+
     input[type="number"]:focus {
-      border-color: var(--primary);
+      border-color: var(--primary-red);
+      box-shadow: 0 0 0 2px rgba(183, 40, 46, 0.15);
     }
-    button {
-      padding: 9px 16px;
-      font-size: 15px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
+
+    .btn {
+      padding: 0.65rem 1.15rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
       font-weight: 600;
-      transition: opacity 0.2s, transform 0.1s;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    button:active {
-      opacity: 0.85;
-      transform: scale(0.98);
+
+    /* Search 按鈕設為高亮紅色 */
+    .btn-search {
+      background: var(--primary-red);
+      color: #fff;
+      border: none;
+      box-shadow: 0 3px 8px rgba(183, 40, 46, 0.25);
     }
-    .btn-query { 
-      background-color: #eee; 
-      color: #333; 
+
+    .btn-search:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
     }
-    .btn-draw { 
-      background-color: var(--primary); 
-      color: #fff; 
+
+    /* Draw Slip 按鈕設為次要灰色 */
+    .btn-draw {
+      background: var(--btn-gray);
+      color: #334155;
+      border: 1px solid var(--border-color);
     }
-    .card-wrap {
-      max-width: 500px;
-      margin: 0 auto;
+
+    .btn-draw:hover {
+      background: var(--btn-gray-hover);
+      color: #0f172a;
+      transform: translateY(-1px);
     }
-    .verse-card {
+
+    .display-area {
+      width: 100%;
+      max-width: 460px;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
       background: var(--card-bg);
-      border: 1px solid #ebd9c8;
+      border: 1px solid var(--border-color);
       border-radius: 12px;
-      padding: 30px 24px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+      padding: 2.25rem 2rem;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      position: relative;
+      text-align: center;
       display: none;
-      animation: fadeIn 0.35s ease-in-out;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .card-border {
+      position: absolute;
+      inset: 8px;
+      border: 1px solid #f0eae1;
+      border-radius: 8px;
+      pointer-events: none;
     }
-    .lot-badge {
-      display: inline-block;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--primary);
+
+    .lot-number {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--gold-accent);
       font-weight: 700;
-      margin-bottom: 12px;
+      letter-spacing: 3px;
+      margin-bottom: 1.25rem;
+      text-transform: uppercase;
     }
-    .verse-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #1a1a1a;
-      margin: 0 0 16px 0;
-      border-bottom: 1.5px solid #f4eae0;
-      padding-bottom: 10px;
-    }
-    .verse-body {
-      white-space: pre-line;
+
+    .verse-text {
+      font-size: 1.15rem;
       line-height: 1.85;
-      font-size: 16px;
       color: #333;
+      white-space: pre-line;
+      margin-bottom: 1.25rem;
     }
-    .placeholder {
-      color: #888;
-      padding: 50px 0;
-      font-size: 15px;
-      line-height: 1.6;
+
+    .empty-tip {
+      color: #8c827a;
+      font-style: italic;
+      font-size: 1rem;
+    }
+
+    /* 儲存提示文字 */
+    .save-hint {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #8c827a;
+      font-style: italic;
+      display: none;
+      text-align: center;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.45s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <div class="lang-bar">
-    <a href="index.html">← 中文版</a>
+  <div class="lang-switch">
+    <a href="index.html">中文版 ↗</a>
   </div>
 
-  <h1>✨ Wisdom Draw · Dharma Verses ✨</h1>
+  <header>
+    <h1>🪷 Wisdom Draw 🪷</h1>
+    <div class="subtitle">Spiritual Verses & Contemplation</div>
+  </header>
 
-  <div class="controls">
-    <input type="number" id="lotInput" min="1" max="70" placeholder="1-70">
-    <button class="btn-query" onclick="handleQuery()">Search</button>
-    <button class="btn-draw" onclick="handleRandom()">Draw Slip</button>
-  </div>
-
-  <div class="card-wrap">
-    <div id="tip" class="placeholder">Enter a number (1–70) or tap "Draw Slip" to receive your verse.</div>
-    <div id="card" class="verse-card">
-      <div id="cardBadge" class="lot-badge"></div>
-      <div id="cardTitle" class="verse-title"></div>
-      <div id="cardBody" class="verse-body"></div>
+  <div class="control-panel">
+    <div class="input-group">
+      <input type="number" id="lotInput" min="1" max="70" placeholder="1-70" />
+      <!-- Search 按鈕高亮為紅色 -->
+      <button class="btn btn-search" onclick="handleQuery()">Search</button>
     </div>
+    <!-- Draw Slip 按鈕為灰色 -->
+    <button class="btn btn-draw" onclick="handleRandom()">Draw Slip</button>
   </div>
 
-  <!-- Loads your generated verses.js file from the same directory -->
+  <div class="display-area">
+    <div id="tip" class="empty-tip">Enter a number (1–70) or click "Draw Slip"</div>
+    
+    <div id="lotCard" class="card">
+      <div class="card-border"></div>
+      <div id="lotNumber" class="lot-number"></div>
+      <div id="verseText" class="verse-text"></div>
+    </div>
+    
+    <!-- 截圖/選取文字儲存提示 -->
+    <div id="saveHint" class="save-hint">Tip: Select text or take a screenshot to save your wisdom verse.</div>
+  </div>
+
+  <!-- 引入英文詩文資料庫 -->
   <script src="verses.js"></script>
 
   <script>
-    const TOTAL_LOTS = 70;
+    const TOTAL_SLIPS = 70;
 
-    function renderLot(num) {
-      if (typeof verses === "undefined") {
-        alert("verses.js file is missing or still loading. Please make sure verses.js is in the same directory.");
+    function renderSlip(num) {
+      if (num < 1 || num > TOTAL_SLIPS || isNaN(num)) {
+        alert("Please enter a valid slip number between 1 and " + TOTAL_SLIPS + ".");
         return;
       }
 
-      const item = verses[num];
-      if (num < 1 || num > TOTAL_LOTS || isNaN(num) || !item) {
-        alert("Please enter a valid number between 1 and " + TOTAL_LOTS);
+      const verse = verses[num];
+      if (!verse) {
+        alert("Verse #" + num + " not found.");
         return;
       }
 
-      document.getElementById("tip").style.display = "none";
-      const card = document.getElementById("card");
-      const titleEl = document.getElementById("cardTitle");
-      const bodyEl = document.getElementById("cardBody");
+      const tip = document.getElementById("tip");
+      const card = document.getElementById("lotCard");
+      const numDisplay = document.getElementById("lotNumber");
+      const textDisplay = document.getElementById("verseText");
+      const hint = document.getElementById("saveHint");
 
-      document.getElementById("cardBadge").innerText = `LOT NO. ${num}`;
-      titleEl.innerText = item.title;
-      bodyEl.innerText = item.text;
+      numDisplay.textContent = `Slip #${num}`;
+      textDisplay.textContent = verse;
 
-      // Dynamically apply cell alignment from Google Sheets (center or left)
-      const alignment = item.align || "left";
-      titleEl.style.textAlign = alignment;
-      bodyEl.style.textAlign = alignment;
-
-      // Re-trigger fade-in animation
-      card.style.display = "none";
-      void card.offsetWidth;
+      tip.style.display = "none";
       card.style.display = "block";
+      hint.style.display = "block";
+
+      card.classList.remove("fade-in");
+      void card.offsetWidth; // 強制重繪觸發動畫
+      card.classList.add("fade-in");
     }
 
     function handleQuery() {
       const val = parseInt(document.getElementById("lotInput").value, 10);
-      renderLot(val);
+      renderSlip(val);
     }
 
     function handleRandom() {
-      const rand = Math.floor(Math.random() * TOTAL_LOTS) + 1;
+      const rand = Math.floor(Math.random() * TOTAL_SLIPS) + 1;
       document.getElementById("lotInput").value = rand;
-      renderLot(rand);
+      renderSlip(rand);
     }
   </script>
 </body>
