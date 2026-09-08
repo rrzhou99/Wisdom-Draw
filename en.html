@@ -42,7 +42,7 @@
       top: 1.25rem;
       right: 1.25rem;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
     .lang-switch a {
@@ -97,13 +97,14 @@
     }
 
     input[type="number"] {
-      width: 80px;
-      padding: 0.6rem;
+      width: 85px;
+      padding: 0.65rem;
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      font-size: 1rem;
+      font-size: 1.05rem;
       text-align: center;
       outline: none;
+      background: #fff;
       font-family: 'Lora', serif;
     }
 
@@ -113,7 +114,7 @@
     }
 
     .btn {
-      padding: 0.65rem 1.15rem;
+      padding: 0.65rem 1.25rem;
       border-radius: 6px;
       font-size: 0.95rem;
       font-weight: 600;
@@ -122,7 +123,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    /* Search 按鈕設為高亮紅色 */
+    /* Red Highlighted Search Button */
     .btn-search {
       background: var(--primary-red);
       color: #fff;
@@ -135,7 +136,7 @@
       transform: translateY(-1px);
     }
 
-    /* Draw Slip 按鈕設為次要灰色 */
+    /* Grey Secondary Draw Slip Button */
     .btn-draw {
       background: var(--btn-gray);
       color: #334155;
@@ -150,7 +151,7 @@
 
     .display-area {
       width: 100%;
-      max-width: 460px;
+      max-width: 480px;
       min-height: 280px;
       display: flex;
       flex-direction: column;
@@ -164,7 +165,7 @@
       border-radius: 12px;
       padding: 2.25rem 2rem;
       width: 100%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       position: relative;
       text-align: center;
       display: none;
@@ -180,31 +181,38 @@
 
     .lot-number {
       font-family: 'Cinzel', serif;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--gold-accent);
       font-weight: 700;
       letter-spacing: 3px;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.75rem;
       text-transform: uppercase;
+    }
+
+    .verse-title {
+      font-family: 'Cinzel', 'Lora', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary-red);
+      margin-bottom: 1.25rem;
+      line-height: 1.4;
     }
 
     .verse-text {
       font-size: 1.15rem;
-      line-height: 1.85;
+      line-height: 1.9;
       color: #333;
       white-space: pre-line;
-      margin-bottom: 1.25rem;
     }
 
     .empty-tip {
       color: #8c827a;
       font-style: italic;
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
 
-    /* 儲存提示文字 */
     .save-hint {
-      margin-top: 1rem;
+      margin-top: 1.25rem;
       font-size: 0.85rem;
       color: #8c827a;
       font-style: italic;
@@ -213,7 +221,7 @@
     }
 
     .fade-in {
-      animation: fadeIn 0.45s ease-out;
+      animation: fadeIn 0.4s ease-out;
     }
 
     @keyframes fadeIn {
@@ -229,17 +237,15 @@
   </div>
 
   <header>
-    <h1>🪷 Wisdom Draw 🪷</h1>
+    <h1>🪷 Wisdom Slips 🪷</h1>
     <div class="subtitle">Spiritual Verses & Contemplation</div>
   </header>
 
   <div class="control-panel">
     <div class="input-group">
       <input type="number" id="lotInput" min="1" max="70" placeholder="1-70" />
-      <!-- Search 按鈕高亮為紅色 -->
       <button class="btn btn-search" onclick="handleQuery()">Search</button>
     </div>
-    <!-- Draw Slip 按鈕為灰色 -->
     <button class="btn btn-draw" onclick="handleRandom()">Draw Slip</button>
   </div>
 
@@ -249,14 +255,14 @@
     <div id="lotCard" class="card">
       <div class="card-border"></div>
       <div id="lotNumber" class="lot-number"></div>
+      <div id="verseTitle" class="verse-title"></div>
       <div id="verseText" class="verse-text"></div>
     </div>
     
-    <!-- 截圖/選取文字儲存提示 -->
     <div id="saveHint" class="save-hint">Tip: Select text or take a screenshot to save your wisdom verse.</div>
   </div>
 
-  <!-- 引入英文詩文資料庫 -->
+  <!-- Loads your existing verses.js -->
   <script src="verses.js"></script>
 
   <script>
@@ -268,7 +274,8 @@
         return;
       }
 
-      const verse = verses[num];
+      // Supports both string and number keys
+      const verse = typeof verses !== "undefined" ? (verses[num] || verses[String(num)]) : null;
       if (!verse) {
         alert("Verse #" + num + " not found.");
         return;
@@ -277,18 +284,28 @@
       const tip = document.getElementById("tip");
       const card = document.getElementById("lotCard");
       const numDisplay = document.getElementById("lotNumber");
+      const titleDisplay = document.getElementById("verseTitle");
       const textDisplay = document.getElementById("verseText");
       const hint = document.getElementById("saveHint");
 
       numDisplay.textContent = `Slip #${num}`;
-      textDisplay.textContent = verse;
+      
+      // Render title and text separately
+      if (typeof verse === "object") {
+        titleDisplay.textContent = verse.title || "";
+        titleDisplay.style.display = verse.title ? "block" : "none";
+        textDisplay.textContent = verse.text || "";
+      } else {
+        titleDisplay.style.display = "none";
+        textDisplay.textContent = verse;
+      }
 
       tip.style.display = "none";
       card.style.display = "block";
       hint.style.display = "block";
 
       card.classList.remove("fade-in");
-      void card.offsetWidth; // 強制重繪觸發動畫
+      void card.offsetWidth;
       card.classList.add("fade-in");
     }
 
